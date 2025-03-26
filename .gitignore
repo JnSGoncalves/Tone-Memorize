@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# Arquivo de att
+*main.cpp

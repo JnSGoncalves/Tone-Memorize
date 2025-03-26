@@ -25,18 +25,21 @@ struct Musica {
   int notas[10];
   int duracoes[10];
   int tamanho;
+  int notasBt[4];
 };
 
 
 Musica musica1 = {
   "Do Re Mi",
-  {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_G4},
+  {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_D4},
   {400, 400, 400, 400, 400},
-  5
+  5,
+  {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}
 };
 
 
 void tocarMusica(Musica m);
+void playBtTone(Musica m);
 
 void setup(){
   pinMode(bt1, INPUT_PULLUP);
@@ -54,12 +57,35 @@ void loop(){
     msg_inicio();
     if(digitalRead(bt3) == LOW) {
       iniciado = true;
-      lcd.clear();
-      lcd.print("Tocando Musica");
       delay(1000);
+
+      playBtTone(musica1);
+      delay(2000);
       tocarMusica(musica1);
     }
+    delay(800);
   }
+}
+
+void playBtTone(Musica m){
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("   Memorize as  ");
+  lcd.setCursor(0,1);
+  lcd.print("notas dos botoes");
+  delay(2000);
+
+  String msg;
+  for(int i = 0; i < 4; i++){
+    msg = "     Botao " + String(i + 1);
+    
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print(msg);
+    tone(buzzer, m.notasBt[i], 2500);
+    delay(3000);
+  }
+  noTone(buzzer);
 }
 
 void msg_inicio(){
@@ -73,6 +99,11 @@ void msg_inicio(){
 
 
 void tocarMusica(Musica m) {
+  lcd.clear();
+  lcd.print("Tocando Musica");
+  lcd.setCursor(0,1);
+  lcd.print(m.nome);
+  delay(1000);
   for(int i = 0; i < m.tamanho; i++) {
     tone(buzzer, m.notas[i], m.duracoes[i]);
     delay(m.duracoes[i] + 100);
