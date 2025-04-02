@@ -28,11 +28,11 @@ struct Musica {
 };
 
 Musica musicas[5] = {
-  {"Do Re Mi", {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}, {400, 400, 400, 400}, 4, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}},
+  {"Do Re Mi", {NOTE_C4, NOTE_D4, NOTE_E4}, {400, 400, 400}, 3, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}},
   {"Escala", {NOTE_C4, NOTE_E4, NOTE_G4, NOTE_C5}, {400, 400, 400, 400}, 4, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}},
-  {"Arpejo", {NOTE_C4, NOTE_G4, NOTE_E4, NOTE_C5}, {400, 400, 400, 400}, 4, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}},
-  {"Melodia", {NOTE_E4, NOTE_G4, NOTE_F4, NOTE_A4}, {400, 400, 400, 400}, 4, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}},
-  {"Desafio", {NOTE_G4, NOTE_F4, NOTE_E4, NOTE_D4}, {300, 300, 300, 300}, 4, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}}
+  {"Arpejo", {NOTE_C4, NOTE_G4, NOTE_E4, NOTE_C5, NOTE_D4}, {400, 400, 400, 400, 400}, 5, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}},
+  {"Melodia", {NOTE_E4, NOTE_G4, NOTE_F4, NOTE_A4, NOTE_B4, NOTE_C5}, {400, 400, 400, 400, 400, 400}, 6, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}},
+  {"Desafio", {NOTE_G4, NOTE_F4, NOTE_E4, NOTE_D4, NOTE_C4, NOTE_B4, NOTE_A4}, {300, 300, 300, 300, 300, 300, 300}, 7, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}}
 };
 
 void tocarMusica(Musica m);
@@ -58,13 +58,10 @@ void loop(){
       iniciado = true;
       delay(1000);
       
-      for(int i = 0; i < 5; i++){
-        playBtTone(musicas[i]);
-        delay(2000);
-        tocarMusica(musicas[i]);
-        getSequenciaBt(musicas[i]);
-        delay(1000);
-      }
+      playBtTone(musicas[0]);
+      delay(2000);
+      tocarMusica(musicas[0]);
+      getSequenciaBt(musicas[0]);
     }
     delay(800);
   }
