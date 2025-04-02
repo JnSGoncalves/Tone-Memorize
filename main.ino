@@ -19,7 +19,6 @@ bool iniciado = false;
 #define NOTE_B4  494
 #define NOTE_C5  523
 
-
 struct Musica {
   String nome;
   int notas[10];
@@ -28,15 +27,13 @@ struct Musica {
   int notasBt[4];
 };
 
-
-Musica musica1 = {
-  "Do Re Mi",
-  {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_D4},
-  {400, 400, 400, 400, 400},
-  5,
-  {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}
+Musica musicas[5] = {
+  {"Do Re Mi", {NOTE_C4, NOTE_D4, NOTE_E4}, {400, 400, 400}, 3, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}},
+  {"Escala", {NOTE_C4, NOTE_E4, NOTE_G4, NOTE_C5}, {400, 400, 400, 400}, 4, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}},
+  {"Arpejo", {NOTE_C4, NOTE_G4, NOTE_E4, NOTE_C5, NOTE_D4}, {400, 400, 400, 400, 400}, 5, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}},
+  {"Melodia", {NOTE_E4, NOTE_G4, NOTE_F4, NOTE_A4, NOTE_B4, NOTE_C5}, {400, 400, 400, 400, 400, 400}, 6, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}},
+  {"Desafio", {NOTE_G4, NOTE_F4, NOTE_E4, NOTE_D4, NOTE_C4, NOTE_B4, NOTE_A4}, {300, 300, 300, 300, 300, 300, 300}, 7, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}}
 };
-
 
 void tocarMusica(Musica m);
 void playBtTone(Musica m);
@@ -60,15 +57,16 @@ void loop(){
     if(digitalRead(bt3) == LOW) {
       iniciado = true;
       delay(1000);
-
-      playBtTone(musica1);
+      
+      playBtTone(musicas[0]);
       delay(2000);
-      tocarMusica(musica1);
-      getSequenciaBt(musica1);
+      tocarMusica(musicas[0]);
+      getSequenciaBt(musicas[0]);
     }
     delay(800);
   }
 }
+
 
 void getSequenciaBt(Musica m){
   int seq[m.tamanho];
