@@ -1,12 +1,15 @@
 #include <LiquidCrystal.h>
 
-LiquidCrystal lcd(12,11,10,9,8,7);
-unsigned int buzzer = 6;
+LiquidCrystal lcd(13,12,11,10,9,8);
+unsigned int buzzer = 7;
 
-int bt1 = 5;
-int bt2 = 4;
-int bt3 = 3; 
-int bt4 = 2;
+int bt1 = 6;
+int bt2 = 5;
+int bt3 = 4; 
+int bt4 = 3;
+int bt5 = 2;
+int bt6 = 1;
+int bt7 = 0;
 
 bool iniciado = false;
 
@@ -17,34 +20,38 @@ bool iniciado = false;
 #define NOTE_G4  392
 #define NOTE_A4  440
 #define NOTE_B4  494
-#define NOTE_C5  523
 
 struct Musica {
-  String nome;
+  char nome[13];
   int notas[10];
   int duracoes[10];
   int tamanho;
-  int notasBt[4];
 };
 
+int notasBt[7] = {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_F4, NOTE_B4};
+
 Musica musicas[5] = {
-  {"Do Re Mi", {NOTE_C4, NOTE_D4, NOTE_E4}, {400, 400, 400}, 3, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}},
-  {"Escala", {NOTE_C4, NOTE_E4, NOTE_G4, NOTE_C5}, {400, 400, 400, 400}, 4, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}},
-  {"Arpejo", {NOTE_C4, NOTE_G4, NOTE_E4, NOTE_C5, NOTE_D4}, {400, 400, 400, 400, 400}, 5, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}},
-  {"Melodia", {NOTE_E4, NOTE_G4, NOTE_F4, NOTE_A4, NOTE_B4, NOTE_C5}, {400, 400, 400, 400, 400, 400}, 6, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}},
-  {"Desafio", {NOTE_G4, NOTE_F4, NOTE_E4, NOTE_D4, NOTE_C4, NOTE_B4, NOTE_A4}, {300, 300, 300, 300, 300, 300, 300}, 7, {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4}}
+  {"Do Re Mi", {NOTE_C4, NOTE_D4, NOTE_E4}, {400, 400, 400}, 3},
+  {"Escala", {NOTE_C4, NOTE_E4, NOTE_G4, NOTE_C4}, {400, 400, 400, 400}, 4},
+  {"Arpejo", {NOTE_C4, NOTE_G4, NOTE_E4, NOTE_C4, NOTE_D4}, {400, 400, 400, 400, 400}, 5},
+  {"Melodia", {NOTE_E4, NOTE_G4, NOTE_F4, NOTE_A4, NOTE_B4, NOTE_C4}, {400, 400, 400, 400, 400, 400}, 6},
+  {"Desafio", {NOTE_G4, NOTE_F4, NOTE_E4, NOTE_D4, NOTE_C4, NOTE_B4, NOTE_A4}, {300, 300, 300, 300, 300, 300, 300}, 7}
 };
 
 void tocarMusica(Musica m);
-void playBtTone(Musica m);
 void getSequenciaBt(Musica m);
 bool compararArrays(int arr1[], int arr2[], int tamanho);
+int menu();
 
 void setup(){
   pinMode(bt1, INPUT_PULLUP);
   pinMode(bt2, INPUT_PULLUP);
   pinMode(bt3, INPUT_PULLUP);
   pinMode(bt4, INPUT_PULLUP);
+  pinMode(bt5, INPUT_PULLUP);
+  pinMode(bt6, INPUT_PULLUP);
+  pinMode(bt7, INPUT_PULLUP);
+
   pinMode(buzzer, OUTPUT);
   
   lcd.begin(16, 2);
@@ -54,16 +61,26 @@ void setup(){
 void loop(){
   if(!iniciado){
     msg_inicio();
-    if(digitalRead(bt3) == LOW) {
+    if(digitalRead(bt1) == LOW) {
       iniciado = true;
       delay(1000);
       
-      playBtTone(musicas[0]);
+      int atual = menu();
+
+      delay(200);
+
+      playBtTone();
       delay(2000);
-      tocarMusica(musicas[0]);
-      getSequenciaBt(musicas[0]);
+      tocarMusica(musicas[atual]);
+      getSequenciaBt(musicas[atual]);
     }
     delay(800);
+  }else{
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print(" Tente de novo");
+    delay(1000);
+    iniciado = false;
   }
 }
 
@@ -115,6 +132,24 @@ void getSequenciaBt(Musica m){
         seq[cont] = 4;
         cont++;
         delay(500);
+    }else if (digitalRead(bt5) == LOW){
+        lcd.setCursor(0,1);
+        lcd.print("   Botao 5");
+        seq[cont] = 5;
+        cont++;
+        delay(500);
+    }else if (digitalRead(bt6) == LOW){
+        lcd.setCursor(0,1);
+        lcd.print("   Botao 6");
+        seq[cont] = 6;
+        cont++;
+        delay(500);
+    }else if (digitalRead(bt7) == LOW){
+        lcd.setCursor(0,1);
+        lcd.print("   Botao 7");
+        seq[cont] = 7;
+        cont++;
+        delay(500);
     }
   }
 
@@ -129,7 +164,7 @@ void getSequenciaBt(Musica m){
   
   int notasSeq[m.tamanho];
   for (int i = 0; i < m.tamanho; i++) {
-    notasSeq[i] = m.notasBt[seq[i] - 1];
+    notasSeq[i] = notasBt[seq[i] - 1];
   }
 
   lcd.clear();
@@ -143,7 +178,7 @@ void getSequenciaBt(Musica m){
   }
 }
 
-void playBtTone(Musica m){
+void playBtTone(){
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("   Memorize as  ");
@@ -152,13 +187,13 @@ void playBtTone(Musica m){
   delay(2000);
 
   String msg;
-  for(int i = 0; i < 4; i++){
+  for(int i = 0; i < 7; i++){
     msg = "     Botao " + String(i + 1);
     
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print(msg);
-    tone(buzzer, m.notasBt[i], 1000);
+    tone(buzzer, notasBt[i], 1000);
     delay(1500);
   }
   noTone(buzzer);
@@ -175,6 +210,57 @@ void tocarMusica(Musica m) {
     delay(m.duracoes[i] + 100);
   }
   noTone(buzzer);
+}
+
+void formatarString(char *destino, const char *origem) {
+    snprintf(destino, 17, "%-16s", origem);
+}
+
+int menu(){
+  int atual = 0;
+
+  bool selecionado = false;
+
+  lcd.clear();
+
+  char msg1[17];
+  char msg2[17];
+  while (!selecionado){
+    if (digitalRead(bt1) == LOW){
+      if(atual > 0){
+        atual -= 1;
+        delay(250);
+      }
+    }
+
+    if (digitalRead(bt2) == LOW){
+      if(atual < 4){
+        atual += 1;
+        delay(250);
+      }
+    }
+    
+    if (digitalRead(bt7) == LOW){
+      selecionado = true;
+      delay(250);
+    }
+
+    sprintf(msg1, "-> %s", musicas[atual].nome);
+    if(atual == 4){
+      sprintf(msg2, "                ");
+    }else{
+      sprintf(msg2, "   %s", musicas[atual + 1].nome);
+      formatarString(msg2, msg2);
+    }
+    formatarString(msg1, msg1);
+
+    lcd.setCursor(0,0);
+    lcd.print(msg1);
+    lcd.setCursor(0,1);
+    lcd.print(msg2);    
+  }
+  
+  return atual;
 }
 
 void msg_inicio(){
