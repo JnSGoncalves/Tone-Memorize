@@ -32,12 +32,13 @@ struct Musica {
 int notasBt[7] = {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_F4, NOTE_B4};
 
 Musica musicas[5] = {
-  {"Do Re Mi", {NOTE_C4, NOTE_D4, NOTE_E4}, {400, 400, 400}, 3},
-  {"Escala", {NOTE_C4, NOTE_E4, NOTE_G4, NOTE_C4}, {400, 400, 400, 400}, 4},
-  {"Arpejo", {NOTE_C4, NOTE_G4, NOTE_E4, NOTE_C4, NOTE_D4}, {400, 400, 400, 400, 400}, 5},
-  {"Melodia", {NOTE_E4, NOTE_G4, NOTE_F4, NOTE_A4, NOTE_B4, NOTE_C4}, {400, 400, 400, 400, 400, 400}, 6},
-  {"Desafio", {NOTE_G4, NOTE_F4, NOTE_E4, NOTE_D4, NOTE_C4, NOTE_B4, NOTE_A4}, {300, 300, 300, 300, 300, 300, 300}, 7}
+  {"Trilha Alegre", {NOTE_C4, NOTE_E4, NOTE_G4, NOTE_C5, NOTE_G4, NOTE_E4, NOTE_C4, NOTE_D4}, {400, 400, 400, 400, 400, 400, 400, 400}, 8},
+  {"Subida", {NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_A4, NOTE_B4, NOTE_C5}, {300, 300, 300, 300, 300, 300, 300, 300}, 8},
+  {"Descida", {NOTE_C5, NOTE_B4, NOTE_A4, NOTE_G4, NOTE_F4, NOTE_E4, NOTE_D4, NOTE_C4}, {300, 300, 300, 300, 300, 300, 300, 300}, 8},
+  {"Sinos", {NOTE_E4, NOTE_G4, NOTE_A4, NOTE_G4, NOTE_E4, NOTE_C4, NOTE_D4, NOTE_E4}, {400, 400, 400, 400, 400, 400, 400, 400}, 8},
+  {"Eco", {NOTE_C4, NOTE_G4, NOTE_E4, NOTE_C5, NOTE_G4, NOTE_C4, NOTE_E4, NOTE_C5}, {500, 300, 400, 500, 300, 400, 500, 300}, 8}
 };
+
 
 void tocarMusica(Musica m, bool comNome);
 void getSequenciaBt(Musica m);
