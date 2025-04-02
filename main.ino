@@ -20,11 +20,12 @@ bool iniciado = false;
 #define NOTE_G4  392
 #define NOTE_A4  440
 #define NOTE_B4  494
+#define NOTE_C5  523
 
 struct Musica {
   char nome[13];
-  int notas[10];
-  int duracoes[10];
+  int notas[15];
+  int duracoes[15];
   int tamanho;
 };
 
@@ -38,7 +39,7 @@ Musica musicas[5] = {
   {"Desafio", {NOTE_G4, NOTE_F4, NOTE_E4, NOTE_D4, NOTE_C4, NOTE_B4, NOTE_A4}, {300, 300, 300, 300, 300, 300, 300}, 7}
 };
 
-void tocarMusica(Musica m);
+void tocarMusica(Musica m, bool comNome);
 void getSequenciaBt(Musica m);
 bool compararArrays(int arr1[], int arr2[], int tamanho);
 int menu();
@@ -71,7 +72,7 @@ void loop(){
 
       playBtTone();
       delay(2000);
-      tocarMusica(musicas[atual]);
+      tocarMusica(musicas[atual], true);
       getSequenciaBt(musicas[atual]);
     }
     delay(800);
@@ -175,6 +176,8 @@ void getSequenciaBt(Musica m){
     lcd.print("  a Sequencia!");
   }else{
     lcd.print("  Voce Acertou!");
+    mscAcerto();
+    delay(500);
   }
 }
 
@@ -199,11 +202,13 @@ void playBtTone(){
   noTone(buzzer);
 }
 
-void tocarMusica(Musica m) {
-  lcd.clear();
-  lcd.print("Tocando Musica");
-  lcd.setCursor(0,1);
-  lcd.print(m.nome);
+void tocarMusica(Musica m, bool comNome) {
+  if(comNome){
+    lcd.clear();
+    lcd.print("Tocando Musica");
+    lcd.setCursor(0,1);
+    lcd.print(m.nome);
+  }
   delay(1000);
   for(int i = 0; i < m.tamanho; i++) {
     tone(buzzer, m.notas[i], m.duracoes[i]);
@@ -280,4 +285,16 @@ bool compararArrays(int arr1[], int arr2[], int tamanho) {
   }
 
   return true;
+}
+
+void mscAcerto(){
+  Musica levelComplete = {
+    "Level",
+    {523, 659, 784, 1047, 1319, 1568, 1760, 1397, 1568, 1319, 1047, 1175, 987, 1047},
+    {200, 200, 200, 200, 200, 200, 200, 200, 400, 200, 200, 200, 200, 400},
+    14
+  };
+
+  tocarMusica(levelComplete, false);
+  delay(500);
 }
