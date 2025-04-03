@@ -18,6 +18,10 @@ int bt5 = 2;
 int bt6 = 1;
 int bt7 = 0;
 
+int ledVerm = 14;
+int ledVerd = 15;
+
+
 bool iniciado = false;
 
 #define NOTE_C4  262
@@ -59,7 +63,7 @@ void setup() {
   pinMode(bt7, INPUT_PULLUP);
 
   pinMode(buzzer, OUTPUT);
-  
+
   lcd.begin(16, 2);
   msg_inicio();
 }
@@ -70,12 +74,12 @@ void loop() {
     if (digitalRead(bt1) == LOW) {
       iniciado = true;
       delay(1000);
-      
+
       int atual = menu();
       delay(200);
       playBtTone();
       delay(2000);
-      
+
       iniciarMusica(musicas[atual]);
     }
     delay(800);
@@ -90,13 +94,16 @@ void iniciarMusica(Musica m) {
   int dificuldade = 2;
   int vida = 5;
 
+  digitalWrite(ledVerm, HIGH);
+  digitalWrite(ledVerd, LOW);
+
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("    Acerte as   ");
   lcd.setCursor(0,1);
   lcd.print("   Sequencias   ");
   delay(1500);
-  
+
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("  Para Ganhar!  ");
@@ -106,6 +113,9 @@ void iniciarMusica(Musica m) {
   char msg1[17];
   char msg2[17];
   while (vida != 0 && dificuldade <= 8) {
+    digitalWrite(ledVerm, HIGH);
+    digitalWrite(ledVerd, LOW);
+
     lcd.clear();
     lcd.setCursor(0, 0);
     sprintf(msg1, "    Nivel: %d    ", (dificuldade / 2));
@@ -132,21 +142,49 @@ void iniciarMusica(Musica m) {
     sprintf(msg2, "Vidas: %d", vida);
     lcd.print(msg2);
 
+    digitalWrite(ledVerm, LOW);
+    digitalWrite(ledVerd, HIGH);
+
     correto = getSequenciaBt(m, dificuldade);
+
+    digitalWrite(ledVerd, LOW);
+
+    delay(500);
 
     lcd.clear();
     lcd.setCursor(0, 0);
     if (correto) {
       lcd.print("  Voce Acertou!");
-      delay(1500);
+
+      digitalWrite(ledVerd, HIGH);
+      delay(400);
+      digitalWrite(ledVerd, LOW);
+      delay(400);
+      digitalWrite(ledVerd, HIGH);
+      delay(400);
+      digitalWrite(ledVerd, LOW);
+      delay(400);
+      digitalWrite(ledVerd, HIGH);
+      
       mscAcerto();
+
       dificuldade += 2;
     } else {
       lcd.print("  Voce Errou a");
       lcd.setCursor(0, 1);
       lcd.print("  a Sequencia!");
       perdaVida();
-      delay(1500);
+
+      digitalWrite(ledVerm, HIGH);
+      delay(400);
+      digitalWrite(ledVerm, LOW);
+      delay(400);
+      digitalWrite(ledVerm, HIGH);
+      delay(400);
+      digitalWrite(ledVerm, LOW);
+      delay(400);
+      digitalWrite(ledVerm, HIGH);
+
       lcd.clear();
       lcd.print(" Tente De Novo! ");
       delay(1500);
@@ -226,7 +264,7 @@ bool getSequenciaBt(Musica m, int numNotas) {
   for (int i = 0; i < numNotas; i++) {
     notasSeq[i] = notasBt[seq[i] - 1];
   }
-  
+
   return compararArrays(m.notas, notasSeq, numNotas);
 }
 
@@ -274,18 +312,18 @@ int menu() {
   lcd.clear();
   char msg1[17];
   char msg2[17];
-  
+
   while (!selecionado) {
     if (digitalRead(bt1) == LOW) {
       if(atual > 0) atual--;
       delay(250);
     }
-    
+
     if (digitalRead(bt2) == LOW) {
       if(atual < 4) atual++;
       delay(250);
     }
-    
+
     if (digitalRead(bt7) == LOW) {
       selecionado = true;
       delay(250);
@@ -327,23 +365,23 @@ void mscGanho() {
     "Level",
     {523, 659, 784, 1047, 1319, 1568, 1760, 1397, 1568, 1319, 1047, 1175, 987, 1047},
     {200, 200, 200, 200, 200, 200, 200, 200, 400, 200, 200, 200, 200, 400},
-    14
+      14
   };
   tocarMusica(levelComplete, false, 14);
 }
 
 void mscGameOver() {
   int notas[] = {659, 659, 659, 523, 659, 784, 392, 523};
-  
+
   int duracoes[] = {180, 180, 180, 360, 180, 720, 180, 720};
-  
+
   const float factor = 1.3; 
 
   for (int i = 0; i < 8; i++) {
     tone(buzzer, notas[i], duracoes[i]);
     delay(duracoes[i] * factor); 
     noTone(buzzer);
-    
+
     if(i == 2 || i == 5) delay(100 * factor); 
   }
 }
@@ -351,7 +389,7 @@ void mscGameOver() {
 void mscAcerto() {
   int notas[] = {440, 554, 659, 880};
   int duracoes[] = {60, 60, 60, 120}; 
-  
+
   const float decay = 0.8;
   const float n64Factor = 1.18;
 
@@ -360,16 +398,16 @@ void mscAcerto() {
     tone(buzzer, notas[i], duracaoReal * decay);
     delay(duracaoReal);
     noTone(buzzer);
-    
+
     if(i < 3) tone(buzzer, notas[i]+15, 20);
   }
 }
 
 void perdaVida() {
   int notas[] = {659, 659, 523};
-  
+
   int duracoes[] = {150, 150, 300};
-  
+
   float delayFator = 1.2;
   int pausaFinal = 200;
 
