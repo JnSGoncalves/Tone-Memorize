@@ -61,6 +61,9 @@ void setup() {
   pinMode(bt5, INPUT_PULLUP);
   pinMode(bt6, INPUT_PULLUP);
   pinMode(bt7, INPUT_PULLUP);
+  
+  pinMode(ledVerm, OUTPUT);
+  pinMode(ledVerd, OUTPUT);
 
   pinMode(buzzer, OUTPUT);
 
